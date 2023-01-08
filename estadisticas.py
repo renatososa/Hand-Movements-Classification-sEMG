@@ -9,7 +9,7 @@ import pickle
 import matplotlib.pyplot as plt
 import numpy as np
 
-file = open('MyoArmband/MyoArmband_data.pickle', 'rb')
+file = open('datos/MyoArmband_data.pickle', 'rb')
 MyoArm_data = pickle.load(file)
 file.close()
 
@@ -33,7 +33,8 @@ fig, ax = plt.subplots(1)
 bp = ax.boxplot(data, patch_artist = True, notch ='True', whis = 2.7, showfliers = False)
 # x-axis labels
 ax.set_xticklabels(['S1','S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10'])
-
+ax.set_xlabel("Sujetos")
+ax.set_ylabel("EMG (mV)")
 # Adding title
 plt.title("EMG vs Sujeto (Electrodo 1)")
 

@@ -9,7 +9,7 @@ import numpy as np
 import math
 import lmoments3 as lm
 import pywt
-
+import clases as cl
 from sklearn.model_selection import cross_validate
 
 def mediana(data):
@@ -19,45 +19,73 @@ def mediana(data):
     return out
 
 
-def re_label(labels, old_labels, new_label):
-    for i in range(len(old_labels)):
-        labels[np.where(labels == old_labels[i])[0]] = new_label
-    return labels
+def secuentialChannelSelection(xTrain, yTrain, xTest, yTest, nFeatures, maxChannels, clasNum, model):
+    channelSelect = []
+    accuracyList = []
+    allChannels = np.array(xTrain.columns)
+    for n in range(maxChannels):
+        accuracy = 0
+        j = 0
+        red = cl.Clasificador(model= model, catNum = clasNum, featureNum = len(channelSelect)+nFeatures)
+        for i in range(int(len(allChannels)/nFeatures)):
+            print("Step: ", n, " Channel:", i)
+            index = np.arange(nFeatures)+i*nFeatures
+            columns = np.concatenate((channelSelect, allChannels[index]))
+            red.train(xTrain[columns], yTrain)
+            yPredict = red.predict(xTest[columns])
+            print("Accuracy: ",np.mean(yPredict==yTest) )        
+            if(np.mean(yPredict==yTest)>accuracy):
+                accuracy = np.mean(yPredict==yTest)
+                j = i
+        index = np.arange(nFeatures)+j
+        channelSelect = np.concatenate((channelSelect, allChannels[index]))
+        allChannels = np.delete(allChannels, index)
+        accuracyList.append(accuracy)
+    return channelSelect, accuracyList
 
-def SFC(model, X, y, splits, n, by, N_features):
-    features = []
-    scores = np.zeros(n)
-    all_scores = []
-    times = np.zeros(n)
-    info = []
-    if(by=='channel'):
-        all_features = list(X.columns)    
-        N = N_features
-    else:
-        all_features.sort()
-        N = 16
-    for i in range(n):
-        m_accuracy = 0
-        for j in range(int(len(all_features)/N)):
-            features_aux = features + all_features[N*j:(j+1)*N]
-            cv_results = cross_validate(model, X[features_aux], y, cv=splits)
-            accuracy = cv_results['test_score'].mean()*100
-            time = cv_results['fit_time'].mean()
-            if accuracy>m_accuracy:
-                times[i] = time
-                m_accuracy = accuracy
-                select_features = all_features[N*j:(j+1)*N]
-                ind = j
-                all_scores
-        del all_features[N*ind:(ind+1)*N]
-        features = features + select_features
-        select_features = []
-        scores[i] = m_accuracy
-        all_scores.append(cv_results['test_score'])
-        info.append(all_features)
-    return features, scores, times, info, all_scores
+def secuentialFeatureSelection(xTrain, yTrain, xTest, yTest, nFeatures, maxFeatures, nChannels, clasNum, model):
+    featureSelect = []
+    accuracyList = []
+    allFeatures = np.array(xTrain.columns)
+    for n in range(nFeatures):
+        accuracy = 0
+        j = 0
+        red = cl.Clasificador(model= model, catNum = clasNum, featureNum = len(featureSelect)+nChannels)
+        for i in range(int(len(allFeatures)/nChannels)):
+            index = np.arange(nChannels)*nFeatures+i
+            columns = np.concatenate((featureSelect, allFeatures[index]))
+            print("Step: ", n, " Feature: ", allFeatures[index[0]].split("_c")[0])
+            red.train(xTrain[columns], yTrain)
+            yPredict = red.predict(xTest[columns])
+            print("Accuracy: ",np.mean(yPredict==yTest) )        
+            if(np.mean(yPredict==yTest)>accuracy):
+                accuracy = np.mean(yPredict==yTest)
+                j = i
+        index = np.arange(nChannels)*nFeatures+j
+        nFeatures = nFeatures -1
+        featureSelect = np.concatenate((featureSelect, allFeatures[index]))
+        allFeatures = np.delete(allFeatures, index)
+        accuracyList.append(accuracy)
+    return featureSelect, accuracyList
 
-def sub_cat(data, label, cat):
+def accuracyByFeature(xTrain, yTrain, xTest, yTest, nFeatures, nChannels, clasNum, model):
+    featureList = []
+    accuracyList = []
+    allFeatures = np.array(xTrain.columns)
+    red = cl.Clasificador(model= model, catNum = clasNum, featureNum = nChannels)
+    for i in range(int(len(allFeatures)/nChannels)):
+        index = np.arange(nChannels)*nFeatures+i
+        columns = allFeatures[index]
+        print(" Feature: ", allFeatures[index[0]].split("_c")[0])
+        featureList.append(allFeatures[index[0]].split("_c")[0])
+        red.train(xTrain[columns], yTrain)
+        yPredict = red.predict(xTest[columns])
+        accuracyList.append(np.mean(yPredict==yTest)*100)
+        print("Accuracy: ",np.mean(yPredict==yTest) ) 
+    return featureList, accuracyList
+
+
+def sub_cat(data, label, cat, tiempo):
     sub_label = label[np.where(label==cat)[0]]
     sub_data = data.iloc[np.where(label==cat)[0]]
     return sub_data, sub_label
@@ -194,7 +222,7 @@ def wamp(data):
     Returns:
         @return: WAMP feature.
     """
-    threshold = 50
+    threshold = 0.01
     return (np.abs(data[:-1] - data[1:]) >= threshold).sum()
 
 
