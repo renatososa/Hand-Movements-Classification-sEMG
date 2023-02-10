@@ -21,7 +21,7 @@ def re_label(labels, old_labels, new_label):
     return labels
 
 class Clasificador:
-    def __init__(self, model = "mlp", arch = [250,500,250], catNum = 52, featureNum = 4*16):
+    def __init__(self, model = "mlp", arch = [250,500,250], catNum = 53, featureNum = 4*16):
         self.model = model
         self.catNum = catNum
         self.featureNum = featureNum
@@ -46,11 +46,13 @@ class Clasificador:
             oa = OAS(store_precision=False, assume_centered=False)
             self.clf = LinearDiscriminantAnalysis(solver="lsqr", covariance_estimator=oa)
             
-    def train(self, xTrain, yTrain, epochs = 50):
+    def train(self, xTrain, yTrain, epochs = 80):
         if(self.model == "mlp"):
             self.clf.fit(xTrain, yTrain, epochs = epochs)
         else:
             self.clf.fit(xTrain, yTrain)
+    def get_model(self):
+        return self.clf
     
     def predict(self, x):
         if(self.model == "mlp"):
@@ -69,7 +71,7 @@ class data:
         self.labels = labels
         self.chNum = chNum
         self.featureNum = featureNum
-        self.clasNum = 52
+        self.clasNum = 53
     
     def modLabelWidth(self, width):
         eventos = np.where(np.diff(self.labels.T)[0]!=0)[0]
@@ -133,8 +135,8 @@ class data:
     def getData(self):
         return self.features, self.labels
     
-    def getSplitData(self, dropZeroSize = 1/2, testSize = 1/7):        
-        a, b = train_test_split(np.where(self.labels["mov"]==0)[0], test_size=5/10)
+    def getSplitData(self, dropZeroSize = 9/10, testSize = 1/7):        
+        a, b = train_test_split(np.where(self.labels["mov"]==0)[0], test_size=dropZeroSize)
         self.features.drop(a, inplace=True)
         self.labels.drop(a, inplace=True)    
         index = np.arange(self.labels.shape[0])

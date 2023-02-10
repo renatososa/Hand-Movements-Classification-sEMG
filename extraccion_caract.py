@@ -43,6 +43,23 @@ def secuentialChannelSelection(xTrain, yTrain, xTest, yTest, nFeatures, maxChann
         accuracyList.append(accuracy)
     return channelSelect, accuracyList
 
+def accuracyByChannel(xTrain, yTrain, xTest, yTest, nFeatures, clasNum, model):
+    channelSelect = []
+    accuracyList = []
+    allChannels = np.array(xTrain.columns)
+    n = 0
+    red = cl.Clasificador(model= model, catNum = clasNum, featureNum = nFeatures)
+    for i in range(int(len(allChannels)/nFeatures)):
+        print("Step: ", n, " Channel:", i)
+        index = np.arange(nFeatures)+i*nFeatures
+        columns = np.concatenate((channelSelect, allChannels[index]))
+        red.train(xTrain[columns], yTrain)
+        yPredict = red.predict(xTest[columns])
+        accuracy = np.mean(yPredict==yTest)
+        print("Accuracy: ",accuracy )     
+        accuracyList.append(accuracy)
+    return channelSelect, accuracyList
+
 def secuentialFeatureSelection(xTrain, yTrain, xTest, yTest, nFeatures, maxFeatures, nChannels, clasNum, model):
     featureSelect = []
     accuracyList = []

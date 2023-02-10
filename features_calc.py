@@ -22,12 +22,12 @@ I = int(fs*s_ms/1000)
 data = MyoArm_data['S1']['emg']
 etiqueta = MyoArm_data['S1']['label']
 sujeto = etiqueta*0 + 1
-
+cor = 200
 # Normalización
 for j in range(16):
-    data[:,j] = data[:,j]/max(abs(data[:,j]))
+    data[:,j] = data[:,j]/np.std(data[:,j])-np.mean(data[:,j])
     
-for i in range(2, 2):
+for i in range(2, 5):
     S_aux = MyoArm_data['S'+str(i)]['emg']
     label_aux = MyoArm_data['S'+str(i)]['label']
     sujeto_aux = label_aux*0 +i
@@ -44,8 +44,8 @@ l = int((len(data)-W+I)/I)
 # Corrección de etiquetas
 eventos = np.where(np.diff(etiqueta.T)[0]!=0)[0]
 for i in range(int(len(eventos)/2)):
-    etiqueta[eventos[i*2]:eventos[i*2]+50] = 0
-    etiqueta[eventos[(i+1)*2]-50:eventos[(i+1)*2]] = 0
+    etiqueta[eventos[i*2]:eventos[i*2]+cor] = 0
+    etiqueta[eventos[i*2+1]-cor:eventos[i*2+1]+1] = 0
 
 rms = np.zeros(l)
 zc = np.zeros(l)
@@ -68,19 +68,19 @@ DWT3 = np.zeros(l)
 FEATURES = pd.DataFrame()
 for j in range(16):
     for i in range(l):
-        wl[i] = features.wl(data[:,j][i*I:(i)*I+W])
-        zc[i] = features.zc(data[:,j][i*I:(i)*I+W], 0.05)
-        ssc[i] = features.ssc(data[:,j][i*I:(i)*I+W], 0.05)
-        rms[i] = features.rms(data[:,j][i*I:(i)*I+W])
-        mav[i] = features.mav(data[:,j][i*I:(i)*I+W])
-        ls[i] = features.ls(data[:,j][i*I:(i)*I+W])
-        mfl[i] = features.mfl(data[:,j][i*I:(i)*I+W])
-        msr[i] = features.msr(data[:,j][i*I:(i)*I+W])
-        wamp[i] = features.wamp(data[:,j][i*I:(i)*I+W])
-        iav[i] = features.iav(data[:,j][i*I:(i)*I+W])
-        dasdv[i] = features.dasdv(data[:,j][i*I:(i)*I+W])
-        _var[i] = features._var(data[:,j][i*I:(i)*I+W])        
-        DWT1[i],DWT2[i],DWT3[i] = features.DWT(data[:,j][i*I:(i)*I+W])
+        wl[i] = features.wl(data[:,j][i*I:(i+1)*I+W])
+        zc[i] = features.zc(data[:,j][i*I:(i+1)*I+W], 0.05)
+        ssc[i] = features.ssc(data[:,j][i*I:(i+1)*I+W], 0.05)
+        rms[i] = features.rms(data[:,j][i*I:(i+1)*I+W])
+        mav[i] = features.mav(data[:,j][i*I:(i+1)*I+W])
+        ls[i] = features.ls(data[:,j][i*I:(i+1)*I+W])
+        mfl[i] = features.mfl(data[:,j][i*I:(i+1)*I+W])
+        msr[i] = features.msr(data[:,j][i*I:(i+1)*I+W])
+        wamp[i] = features.wamp(data[:,j][i*I:(i+1)*I+W])
+        iav[i] = features.iav(data[:,j][i*I:(i+1)*I+W])
+        dasdv[i] = features.dasdv(data[:,j][i*I:(i+1)*I+W])
+        _var[i] = features._var(data[:,j][i*I:(i+1)*I+W])        
+        DWT1[i],DWT2[i],DWT3[i] = features.DWT(data[:,j][i*I:(i+1)*I+W])
     FEATURES["wl_c"+str(j+1)] = wl/max(abs(wl))
     FEATURES["zc_c"+str(j+1)] = zc/max(abs(zc))  
     FEATURES["ssc_c"+str(j+1)] = ssc/max(abs(ssc))  
@@ -108,5 +108,5 @@ for i in range(l):
 labels = {'mov':label, 'subjet': subject}
 labels = pd.DataFrame(labels)
 
-dump(FEATURES, "datos/FEATURES.joblib")
-dump(labels, "datos/label.joblib")
+dump(FEATURES, "Datos/FEATURES.joblib")
+dump(labels, "Datos/label.joblib")
