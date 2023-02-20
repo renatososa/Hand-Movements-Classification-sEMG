@@ -1,2 +1,2 @@
-Datos
-Imagenes
+*.joblib
+*.pickle
