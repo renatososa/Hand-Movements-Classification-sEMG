@@ -71,5 +71,6 @@ plt.tight_layout()
 plt.title("Matriz de confusión para los datos de testeo")
 plt.ylabel("Predict class")
 plt.xlabel("True class")
+plt.show()
 
 

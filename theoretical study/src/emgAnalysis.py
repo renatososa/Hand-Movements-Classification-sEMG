@@ -92,6 +92,6 @@ ax[0].grid(), ax[1].grid(), ax[0].legend(), ax[1].legend()
 fig.suptitle("Señal de sEMG. Sensor 11 y 15. Movimientos 11 y 12.")
 
 
-
+plt.show()
 
 

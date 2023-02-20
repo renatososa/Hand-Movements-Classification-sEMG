@@ -49,3 +49,5 @@ plt.legend()
 plt.yticks(np.arange(len(x_axis_labels)), x_axis_labels)
 plt.ylabel("Movimiento")
 plt.xlabel("Tiempo (s)")
+
+plt.show()

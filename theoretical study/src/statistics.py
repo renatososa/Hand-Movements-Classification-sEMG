@@ -42,3 +42,5 @@ ax.set_xticklabels([str(x) for x in range(53)])
 
 # Adding title
 plt.title("EMG vs Movimiento (Electrodo 1)")
+
+plt.show()
