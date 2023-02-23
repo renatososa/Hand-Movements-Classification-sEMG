@@ -8,3 +8,5 @@ Para esto hay que realziar los sigueientes pasos:
 6) Subir el modelo a el ESP32 a partir del archivo ESP32_MLP.ino en la carpeta ESP32_MLP. 
 7) Capturar datos clasificados para evaluar el desempeño del clasificador implementado en la ESP32. La etiqueta real se realiza con el puslador del módulo y la predicción es realziada por el calasificador. Generar un archivo .csv por movimeinto y nombrearlos como eval_N°.csv, donde N° es el número del movimiento. Ej. eval_1.csv, evaluación del movimeinto 1.
 7) Ejecutar el script evaluateModel.py. Configurar la cantida de movimientos adquiridos.
+8) 
+Copyright (C) 2023  Renato Sosa Machado Shceeffer. Universidad de la República, Uruguay.
