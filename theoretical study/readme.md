@@ -9,3 +9,5 @@ Para replicar el estudio teórico realizado en este proyecto es necesario seguir
 8) Ejecutar el script plotsFeaturesAndSensorsAnalysis.py. Este realiza un plor de los datos calculados anteriormente.
 
 Todos los scripts que deben ser ejecutados se encuentran dentro de la carpeta src.
+
+Copyright (C) 2023  Renato Sosa Machado Shceeffer. Universidad de la República, Uruguay.
