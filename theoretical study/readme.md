@@ -18,4 +18,4 @@ Para replicar el estudio teórico realizado en este proyecto es necesario seguir
 7) Ejecutar el script `src/featuresAndSensorsAnalysis.py`. En este script se estudia el impacto de las features y los sensores sobre la clasificación de los gestos sobre cada uno de los algoritmos utilziados (MLP, SVM y LightGBM). Puede tardar más de 10 horas.
 8) Ejecutar el script `src/plotsFeaturesAndSensorsAnalysis.py`. Este realiza un plor de los datos calculados anteriormente.
 
-Copyright (C) 2023  Renato Sosa Machado Shceeffer. Universidad de la República, Uruguay.
+Copyright (C) 2023  Renato Sosa Machado Scheeffer. Universidad de la República, Uruguay.
