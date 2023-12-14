@@ -7,6 +7,6 @@ En el presente proyecto se dividió en dos grandes etapas:
 3) Implementación de la digitalización y del modelo de machine learning en la plataforma ESP32. [Prototype](https://github.com/renatososa/Hand-Movements-Classification-sEMG/tree/main/prototype)
 
 En caso de utilizar este repositorio para un proyecto de investigación o desarrollo, por favor, citar este trabajo:
-'''Sosa Machado Scheeffer, R. (2023). Estudio y prototipado de un sistema de clasificación automática de gestos de la mano utilizando electromiografía. Tesis de grado. Licenciatura en ingeniería biológica. Universidad de la República (Uruguay).'''
+```Sosa Machado Scheeffer, R. (2023). Estudio y prototipado de un sistema de clasificación automática de gestos de la mano utilizando electromiografía. Tesis de grado. Licenciatura en ingeniería biológica. Universidad de la República (Uruguay).```
 
 Copyright (C) 2023  Renato Sosa Machado Scheeffer. Universidad de la República, Uruguay.
