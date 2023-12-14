@@ -1,6 +1,6 @@
 Archivos necesarios para diseñar, entrenar y exprotar el algoritmos de machine learning al ESP32. El diseño y entrenamiento se hacen en Python luego el modelo es covnertido a C++.
 Para esto hay que realziar los sigueientes pasos:
-1) Instalar las librerías listadas en requirements.txt.
+1) Instalar las librerías listadas en ```requirements.txt.```
 2) Instalar en Arduino IDE la librería EloquenTinyML y filters: https://github.com/MartinBloedorn/libFilter
 3) Datos para el entrenamiento: se pueden utilizar los datos que ya fueron adquiridos o adquirir nuevos datos. Cada movimiento debe estar en un archivo .csv por separado y el nombre del archivo identifica el movimiento. Ej. 1.csv (registro del movimeinto 1).
 4) Ejecutar el script generateModel.py. En este se debe setear la cantidad de movimientos registrados y que se desean clasificar. También se puede modificar el diseño del algoritmo. Luego de ejecutado se generará un archivo model.h en el directorio prototype/ESP32_MLP/src
